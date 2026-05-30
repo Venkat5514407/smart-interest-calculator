@@ -61,6 +61,8 @@ Smart-Interest-Calculator/
 ├── about.html
 ├── privacy.html
 ├── README.md
+├── LICENSE
+├── .gitignore
 ├── css/
 │   └── style.css
 ├── js/
