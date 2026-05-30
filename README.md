@@ -3,7 +3,7 @@
 
 A dual-language (English & Telugu) financial calculator designed to help users calculate interest using both traditional local Vaddi systems and modern banking interest methods.
 
-🌐 **Live Demo:** [Add Vercel Link Here]
+🌐 **Live Demo:** [smart-interest-calculator.vercel.app](https://smart-interest-calculator.vercel.app)
 
 ---
 
