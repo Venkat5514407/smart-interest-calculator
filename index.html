@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Interest Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 font-sans transition-all min-h-screen">
+
+    <nav
+        class="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800/80 py-3 px-6 flex justify-between items-center shadow-sm transition-colors duration-200">
+        <div class="flex flex-col">
+            <div class="flex items-center gap-2 font-black text-lg md:text-xl text-indigo-600 dark:text-indigo-400">
+                <span>💰</span>
+                <span data-key="title">Smart Interest Calculator</span>
+            </div>
+            <span class="text-[10px] md:text-xs text-gray-400 dark:text-slate-400 font-medium tracking-wide"
+                data-key="subtitle">తెలుగు వడ్డీ లెక్కింపు</span>
+        </div>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div
+                class="flex bg-gray-100 dark:bg-slate-800 rounded-lg p-1 text-xs font-medium transition-colors duration-200">
+                <button onclick="setLanguage('en')" id="lang-en"
+                    class="px-2 md:px-3 py-1.5 rounded-md transition-all">English</button>
+                <button onclick="setLanguage('te')" id="lang-te"
+                    class="px-2 md:px-3 py-1.5 rounded-md transition-all">తెలుగు</button>
+            </div>
+            <button onclick="toggleDarkMode()"
+                class="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-sm transition-all shadow-sm">
+                🌙
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <section
+            class="lg:col-span-2 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-sm flex flex-col gap-4 transition-colors duration-200">
+            <h3 class="text-base font-bold text-gray-800 dark:text-slate-200 border-b border-gray-100 dark:border-slate-800/60 pb-2"
+                data-key="formTitle">Loan Setup Details</h3>
+
+            <div id="validation-message"
+                class="hidden bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-amber-900 dark:text-amber-400 text-xs rounded-xl p-3 flex items-center gap-2">
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-gray-600 dark:text-slate-400" data-key="labelName">Borrower
+                    Name</label>
+                <input type="text" id="borrower-name" placeholder="e.g. Siva"
+                    class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-gray-600 dark:text-slate-400"
+                        data-key="labelPrincipal">Principal Amount (₹)</label>
+                    <input type="number" id="principal" placeholder="e.g. 100000"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-gray-600 dark:text-slate-400" data-key="labelType">Interest
+                        Type</label>
+                    <select id="interest-type"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                        <option value="monthly-flat" data-key="optFlat">Monthly Flat Interest</option>
+                        <option value="simple-annual" data-key="optSimple">Simple Interest (Annual)</option>
+                        <option value="compound-annual" data-key="optCompound">Compound Interest (Annual)</option>
+                        <option value="emi" data-key="optEMI">Equal Monthly Installment (EMI)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-gray-600 dark:text-slate-400" data-key="labelMode">Rate
+                        Mode / Interest Basis</label>
+                    <select id="rate-mode"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                        <option value="vaddi" data-key="optVaddi">₹ per ₹100 (Monthly Market Vaddi)</option>
+                        <option value="percentage" data-key="optPercent">Percentage % (Annual Bank Rate)</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-gray-600 dark:text-slate-400" data-key="labelRate">Interest
+                        Rate / Value</label>
+                    <input type="number" step="0.01" id="rate" placeholder="e.g. 2"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-gray-600 dark:text-slate-400" data-key="labelStart">Start
+                        Date</label>
+                    <input type="date" id="start-date"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                </div>
+                <div class="flex flex-col gap-1.5 relative">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-semibold text-gray-600 dark:text-slate-400"
+                            data-key="labelEnd">Calculate As Of Date</label>
+                        <label
+                            class="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 dark:text-indigo-400 cursor-pointer">
+                            <input type="checkbox" id="till-today-checkbox" onchange="toggleTillToday(this)"
+                                class="rounded text-indigo-600 focus:ring-indigo-500 h-3 w-3 bg-gray-100 dark:bg-slate-800 border-gray-300 dark:border-slate-700">
+                            <span data-key="labelTodayToggle">Until Today</span>
+                        </label>
+                    </div>
+                    <input type="date" id="end-date"
+                        class="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                </div>
+            </div>
+
+            <button onclick="handleCalculation()"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md shadow-indigo-500/10 dark:shadow-none transition-all mt-2"
+                data-key="btnCalculate">Calculate Interest</button>
+        </section>
+
+        <section class="space-y-6">
+
+            <div
+                class="bg-slate-900 dark:bg-slate-900/40 border border-slate-800 dark:border-slate-800/80 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col gap-4">
+                <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-wider" data-key="resultTitle">
+                    Calculation Results</h3>
+
+                <div class="space-y-3 divide-y divide-slate-800/60">
+                    <div class="flex justify-between items-center text-xs pt-1">
+                        <span class="text-slate-400" data-key="resLabelMethod">Method</span>
+                        <span id="res-method" class="font-medium text-slate-200">-</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs pt-2">
+                        <span class="text-slate-400" data-key="resLabelPrincipal">Principal Amount</span>
+                        <span id="res-principal" class="font-bold text-sm text-slate-100">₹0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs pt-2">
+                        <span class="text-slate-400" data-key="resLabelDays">Days Passed</span>
+                        <span id="res-days" class="font-semibold text-slate-100">0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs pt-2">
+                        <span class="text-slate-400" data-key="resLabelMonths">Months Passed</span>
+                        <span id="res-months" class="font-semibold text-slate-100">0 M / 0 D</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs pt-2">
+                        <span class="text-slate-400 font-semibold" data-key="resLabelInterest">Interest Amount</span>
+                        <span id="res-interest" class="font-black text-base text-emerald-400">₹0</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-3 border-t border-indigo-500/30">
+                        <span class="text-indigo-200 text-sm font-medium" data-key="resLabelTotal">Total Amount
+                            Due</span>
+                        <span id="res-total" class="font-extrabold text-xl text-white">₹0</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-2 border-t border-slate-800/80 pt-4">
+                    <button onclick="exportToClipboard()"
+                        class="bg-indigo-950/40 hover:bg-indigo-900/60 text-indigo-300 hover:text-white px-3 py-2 rounded-lg text-xs font-medium border border-indigo-500/20 transition-all flex items-center justify-center gap-1.5">
+                        <span>📋</span>
+                        <span data-key="btnCopy">Copy Summary</span>
+                    </button>
+                    <button onclick="exportToTxtFile()"
+                        class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-2 rounded-lg text-xs font-medium border border-slate-700 transition-all flex items-center justify-center gap-1.5">
+                        <span>💾</span>
+                        <span data-key="btnDownload">Download TXT</span>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm transition-colors duration-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-gray-800 dark:text-slate-200 text-xs uppercase tracking-wider"
+                        data-key="loanLedger">Loan Ledger</h3>
+                    <div class="flex gap-3 text-xs">
+                        <button onclick="clearForm()" class="text-indigo-600 dark:text-indigo-400 hover:underline"
+                            data-key="btnClearForm">Clear Form</button>
+                        <button onclick="wipeSavedLedger()" class="text-red-500 dark:text-red-400 hover:underline"
+                            data-key="btnClear">Clear Ledger</button>
+                    </div>
+                </div>
+
+                <div id="ledger-list" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                    <div id="ledger-empty-state" class="text-sm text-gray-400 dark:text-slate-500 text-center py-4"
+                        data-key="emptyLedger">
+                        No calculations yet
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="js/translations.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
