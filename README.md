@@ -219,8 +219,21 @@ All calculations are performed entirely within your browser.
 * All saved records remain stored locally via browser localStorage.
 
 ---
-
 ## 📌 Version History
+
+### v1.0.1 (Latest Release)
+
+✅ Fixed partial-period interest calculations using actual elapsed days
+
+✅ Improved Monthly Flat Interest accuracy
+
+✅ Improved Compound Interest calculations for partial periods
+
+✅ Improved EMI duration calculations
+
+✅ General calculation reliability improvements
+
+---
 
 ### v1.0.0
 
