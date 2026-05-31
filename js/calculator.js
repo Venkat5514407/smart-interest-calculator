@@ -25,8 +25,7 @@ class InterestCalculator {
             remainingDays += previousMonth;
         }
 
-        // Total fractional months & fractional years
-        const preciseMonths = totalMonths + (remainingDays / 30);
+        // Total fractional years
         const tYears = daysPassed / 365;
 
         // 3. FIX: Properly normalize rates based on the chosen UI mode
@@ -48,10 +47,13 @@ class InterestCalculator {
         let methodNameTe = "";
 
         // 4. Run calculations using our cleanly normalized rates
+    
         if (type === "monthly-flat") {
             methodNameEn = "Monthly Flat Interest";
             methodNameTe = "నెలవారీ ఫ్లాట్ వడ్డీ";
-            interestAmount = principal * (monthlyRate / 100) * preciseMonths;
+
+            const exactMonths = daysPassed / 30;
+            interestAmount = principal * (monthlyRate / 100) * exactMonths;
 
         } else if (type === "simple-annual") {
             methodNameEn = "Simple Interest (Annual)";
@@ -62,7 +64,8 @@ class InterestCalculator {
             methodNameEn = "Compound Interest (Annual)";
             methodNameTe = "చక్రవడ్డీ";
             // Compounding monthly rate over the precise calculated months
-            const totalAmountCompound = principal * Math.pow((1 + (monthlyRate / 100)), preciseMonths);
+            const exactMonths = daysPassed / 30;
+            const totalAmountCompound = principal * Math.pow((1 + (monthlyRate / 100)), exactMonths);
             interestAmount = totalAmountCompound - principal;
 
         } else if (type === "emi") {
@@ -70,7 +73,7 @@ class InterestCalculator {
             methodNameTe = "సమాన నెలవారీ వాయిదా (EMI)";
 
             // Calculate total months rounded to nearest whole number for installment periods
-            const totalInstallments = Math.max(1, Math.round(preciseMonths));
+            const totalInstallments = Math.max(1, Math.round(daysPassed / 30));
             const rFraction = (monthlyRate / 100);
 
             if (rFraction === 0) {
